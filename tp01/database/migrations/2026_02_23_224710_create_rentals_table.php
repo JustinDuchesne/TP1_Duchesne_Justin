@@ -17,8 +17,10 @@ return new class extends Migration
             $table->date('startDate');
             $table->date('endDate');
             $table->decimal('totalPrice',10);
-            $table->foreign("userId")->constrained()->references('id')->on('users');
-            $table->foreign("equipmentId")->constrained()->references('id')->on('equipment');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('equipment_id');
+            $table->foreign("user_id")->constrained()->references('id')->on('users');
+            $table->foreign("equipment_id")->constrained()->references('id')->on('equipment');
         });
     }
 

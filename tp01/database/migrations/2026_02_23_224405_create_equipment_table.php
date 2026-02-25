@@ -16,8 +16,9 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name', 50);
             $table->text('description');
-            $table->decimal('dailyPrice', 10);
-            $table->foreign("categoryId")->constrained()->references('id')->on('categories');
+            $table->decimal('daily_price', 10);
+            $table->unsignedBigInteger('category_id');
+            $table->foreign("category_id")->constrained()->references('id')->on('categories');
         });
     }
 
