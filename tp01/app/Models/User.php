@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -18,9 +20,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
-        'password',
+        'phone',
+        'phone',
     ];
 
     /**
@@ -44,5 +48,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function review() : BelongsTo  { 
+        return $this->BelongsTo ('\App\Models\Review');
+    }
+    public function rental() : BelongsTo  { 
+        return $this->BelongsTo ('\App\Models\Rental');
     }
 }

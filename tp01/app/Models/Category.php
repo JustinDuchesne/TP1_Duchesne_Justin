@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
-class Sport extends Model
+class Category extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function equipmentSport() : BelongsTo  { 
-        return $this->BelongsTo ('\App\Models\Category'); //idk comment
+    public function equipment() : BelongsTo  { //je le fait apres chu brain dead rn
+        return $this->BelongsTo ('\App\Models\Equipment');
     }
 }
