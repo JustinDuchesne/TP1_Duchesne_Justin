@@ -24,7 +24,6 @@ class User extends Authenticatable
         'last_name',
         'email',
         'phone',
-        'phone',
     ];
 
     /**
@@ -32,28 +31,28 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    //protected $hidden = [
+    //    'password',
+    //    'remember_token',
+    //];
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    //protected function casts(): array
+    //{
+    //    return [
+    //        'email_verified_at' => 'datetime',
+    //        'password' => 'hashed',
+    //    ];
+    //}
 
-    public function review() : BelongsTo  { 
-        return $this->BelongsTo ('\App\Models\Review');
+    public function review() : HasMany  { 
+        return $this->HasMany ('\App\Models\Review');
     }
-    public function rental() : BelongsTo  { 
-        return $this->BelongsTo ('\App\Models\Rental');
+    public function rental() : HasMany  { 
+        return $this->HasMany ('\App\Models\Rental');
     }
 }

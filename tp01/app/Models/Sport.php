@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sport extends Model
@@ -12,7 +13,7 @@ class Sport extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function equipmentSport() : BelongsTo  { 
-        return $this->BelongsTo ('\App\Models\Category'); //idk comment
+    public function equipmentSport() : HasMany  { 
+        return $this->HasMany ('\App\Models\Equipment'); //idk comment
     }
 }

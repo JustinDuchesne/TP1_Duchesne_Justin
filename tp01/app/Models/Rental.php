@@ -11,13 +11,13 @@ class Rental extends Model
     use HasFactory;
     protected $fillable = ['start_date','end_date','total_price','user_id','equipment_id'];
 
-    public function user() : HasMany  {
-        return $this->HasMany ('\App\Models\User');
+    public function user() : BelongsTo  {
+        return $this->BelongsTo ('\App\Models\User');
     }
-    public function equipment() : HasMany  {
-        return $this->HasMany ('\App\Models\Equipment');
+    public function equipment() : BelongsTo  {
+        return $this->BelongsTo ('\App\Models\Equipment');
     }
-    public function review() : BelongsTo  {
-        return $this->BelongsTo ('\App\Models\Review');
+    public function review() : HasMany  {
+        return $this->HasMany ('\App\Models\Review');
     }
 }

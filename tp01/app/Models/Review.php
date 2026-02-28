@@ -12,10 +12,10 @@ class Review extends Model
     use HasFactory;
     protected $fillable = ['rating','comment','user_id','rental_id'];
 
-    public function rental() : HasMany  {
-        return $this->HasMany ('\App\Models\Category');
+    public function rental() : BelongsTo  {
+        return $this->BelongsTo ('\App\Models\Rental');
     }
-    public function user() : HasMany  {
-        return $this->HasMany ('\App\Models\User');
+    public function user() : BelongsTo  {
+        return $this->BelongsTo ('\App\Models\User');
     }
 }

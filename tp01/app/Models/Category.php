@@ -11,7 +11,7 @@ class Category extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function equipment() : BelongsTo  { //je le fait apres chu brain dead rn
+    public function equipment() : BelongsTo  {
         return $this->BelongsTo ('\App\Models\Equipment');
     }
 }
