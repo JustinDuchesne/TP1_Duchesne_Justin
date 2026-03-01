@@ -19,8 +19,7 @@ class ReviewFactory extends Factory
         return [
             'rating' => fake()->numberBetween(1, 10),
             'comment' => fake()->text(255),
-            'user_id' => fake()->randomElement('\App\Models\User'::class('id')),
-            'rental_id' => fake()->randomElement('\App\Models\Rental'::class('id'))
+            'rental_id' => \App\Models\Rental::inRandomOrder()->value('id')
         ];
     }
 }

@@ -21,7 +21,7 @@ class EquipmentFactory extends Factory
             'name' => fake()->text(10),
             'description' => fake()->text(255),
             'daily_price' => fake()->numberBetween(0,10000),
-            'category_id' => fake()->randomElement('\App\Models\Category'::class('id'))
+            'category_id' => \App\Models\Category::all()->random()->id
         ];
     }
 }

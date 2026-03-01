@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Equipment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,12 +18,13 @@ class RentalFactory extends Factory
      */
     public function definition(): array
     {
+        //https://stackoverflow.com/questions/44102483/in-laravel-how-do-i-retrieve-a-random-user-id-from-the-users-table-for-model-fa
         return [
             'start_date' => fake()->date('Y-m-d', 'now'), //fait pas trop de sense mais ca va marcher temporairement
             'end_date' => fake()->date('Y-m-d', 'now'),
             'total_price' => fake()->numberBetween(0,10000),
-            'user_id' => fake()->randomElement('\App\Models\User'::class('id')),
-            'equipment_id' => fake()->randomElement('\App\Models\Equipment'::class('id'))
+            'user_id' => User::inRandomOrder()->value('id'),
+            'equipment_id' => Equipment::inRandomOrder()->value('id')
         ];
     }
 }
