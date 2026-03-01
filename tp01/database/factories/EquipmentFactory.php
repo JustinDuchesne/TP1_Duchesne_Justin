@@ -18,7 +18,7 @@ class EquipmentFactory extends Factory
     {
         //faker use foreign key laravel requête google Ai (google search?)
         return [
-            'name' => fake()->text(10),
+            'name' => fake()->text(49),
             'description' => fake()->text(255),
             'daily_price' => fake()->numberBetween(0,10000),
             'category_id' => \App\Models\Category::all()->random()->id
