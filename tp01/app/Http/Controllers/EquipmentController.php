@@ -9,6 +9,10 @@ class EquipmentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    const OK = 200;
+    const SERVER_ERROR = 500;
+    const NOT_FOUND = 404;
+    const INVALID_CONTENT = 422;   //faire enum plus tard
     public function index()
     {
         //
