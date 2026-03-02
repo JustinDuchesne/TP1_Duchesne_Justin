@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Equipment;
 use App\Models\Rental;
 use App\Models\Review;
+use App\Models\Sport;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,6 +25,8 @@ class DatabaseSeeder extends Seeder
         //$this->call(EquipmentSeeder::class);
         //$this->call(EquipmentSportSeeder::class);
         // Je les laisse dans le cas où j'en ai besoin dans le futur
+        Equipment::factory(10)->has(Sport::factory(2))->create();
+
         User::factory(4)->has(Rental::factory(4))->has(Review::factory(4))->create();
 
     }
