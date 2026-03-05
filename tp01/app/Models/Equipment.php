@@ -20,7 +20,7 @@ class Equipment extends Model
         return $this->BelongsToMany ('\App\Models\Sport');
     }
 
-    public function rental() : HasMany  {
+    public function rentals() : HasMany  {
         return $this->HasMany ('\App\Models\Rental');
     }
 }

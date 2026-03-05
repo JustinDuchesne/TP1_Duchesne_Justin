@@ -19,7 +19,7 @@ class CategoryController extends Controller
     const SERVER_ERROR = 500;
     const NOT_FOUND = 404;
     const INVALID_CONTENT = 422;   //faire enum plus tard
-    const OK_CREATED = 201; //Created successful
+    const OK_CREATED = 201;
 
     public function index()
     {
