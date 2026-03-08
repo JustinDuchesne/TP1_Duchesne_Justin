@@ -11,33 +11,17 @@ use Exception;
 use Illuminate\Container\Attributes\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class EquipmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
-
     public function index()
     {
         try {
             return EquipmentResource::collection(Equipment::paginate(20))->response()->setStatusCode(OK);
-        } catch (Exception $ex) {
-            abort(SERVER_ERROR, 'Server error');
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(EquipmentRequest $request)
-    {
-        try {
-            $equipment = Equipment::create($request->validated());
-            return (new EquipmentResource($equipment))->response()->setStatusCode(OK_CREATED);
-        } catch (QueryException $ex) {
-            abort(INVALID_CONTENT, 'Cannot be created in database');
         } catch (Exception $ex) {
             abort(SERVER_ERROR, 'Server error');
         }
@@ -57,57 +41,52 @@ class EquipmentController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(EquipmentRequest $request, string $id)
-    {
-        try{
-            //https://laracasts.com/discuss/channels/laravel/how-to-do-update-controller-routes-model-and-other-things-from-laravel-54-from-scratch-tutorial
-            $equipment = Equipment::findOrFail($id);
-            $equipment->update($request->all());
-            return response()->noContent()->setStatusCode(OK);
-        }catch (QueryException $ex) {
-            abort(INVALID_CONTENT, 'Cannot be edited in database');
-        } catch (Exception $ex) {
-            abort(SERVER_ERROR, 'Server error');
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try { //il y a pas de réponse...
-            Equipment::destroy($id); 
-            return response()->noContent()->setStatusCode(OK);
-        } catch (QueryException $ex) {
-            abort(INVALID_CONTENT, 'Cannot be deleted in database');
-        } catch (Exception $ex) {
-            abort(SERVER_ERROR, 'Server error');
-        }
-    }
-
     public function popularity(string $id)
     {
         try{
-            //$equipment = Equipment::findOrFail($id);
-            //$allRentals = Rental::where("equipment_id", $id); //faire join
-
-            //dd($allRentals);
-            //$allReviews = Review::join( 'rentals', 'reviews.rental_id' ,'=', ' rentals.id') //'reviews', 'rentals.id', '=', 'reviews.rental_id'
-            //    ->where('rentals.equipment_id', $id)
-            //    ->select('COALESCE(COUNT(reviews.id),0) AS Nb_Reviews', 'SUM(reviews.rating) AS Avg_rating')
-            //    ->get();
-
             $allReviews = Review::join( 'rentals', 'reviews.rental_id' ,'=', 'rentals.id') //'reviews', 'rentals.id', '=', 'reviews.rental_id'
                 ->where('rentals.equipment_id', $id)
                 ->selectRaw('COALESCE(COUNT(reviews.id),0) AS Nb_Reviews, SUM(reviews.rating) AS Avg_rating')
-                ->first();
+                ->first(); //first? a revoir
 
             //dd($allReviews);
             return ['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4]; //'popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4
+        } catch (ModelNotFoundException $ex) {
+            abort(NOT_FOUND, 'Invalid id');
+        } catch (Exception $ex) {
+            abort(SERVER_ERROR, 'Server error');
+        }
+    }
+
+    public function average(string $id, Request $request)
+    {
+        try{
+            $request->min_date; //doit lever érreur si min est plus grande que end
+            $request->max_date; //le format doit etre valide
+                                //paginer 20
+
+            if($request->min_date > $request->max_date){
+                return ["La date minimum ne peut pas être suppérieur à la date maximum"];
+            }
+
+            //$allEquipment = Rental::join('equipment', 'rentals.equipment_id', '=', 'equipment.id')
+            //    ->where('rentals.start_date', '>=', $request->min_date)
+            //    ->where('rentals.end_date', '<=', $request->max_date)
+            //    ->where('equipment.id', $id)
+            //    ->selectRaw('AVG(rentals.total_price) AS average_price')
+            //    ->first();
+
+
+            $allEquipment = Rental::join('equipment', 'rentals.equipment_id', '=', 'equipment.id')
+                ->whereDate('rentals.start_date', '>', $request->min_date)
+                ->whereDate('rentals.end_date', '<', $request->max_date)
+                ->where('rentals.equipment_id', '=',$id)
+                ->avg('total_price');
+                //->selectRaw('AVG(rentals.total_price) AS average_price')
+                //->first();
+
+            //dd($allEquipment);
+            return $allEquipment;
         } catch (ModelNotFoundException $ex) {
             abort(NOT_FOUND, 'Invalid id');
         } catch (Exception $ex) {
