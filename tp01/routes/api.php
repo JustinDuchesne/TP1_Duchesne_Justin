@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,17 +29,15 @@ Route::get('/user', function (Request $request) {
 //Route::get('/equipment/average/{id}', [EquipmentController::class,'average']);
 
 Route::get('/equipment', [EquipmentController::class,'index']);
-Route::post('/equipment', [EquipmentController::class,'store']);
-Route::get('/equipment/{id}', [EquipmentController::class,'show']);
-Route::patch('/equipment/{id}', [EquipmentController::class,'update']);
-Route::delete('/equipment/{id}', [EquipmentController::class,'destroy']); 
-
+Route::post('/equipment/{id}', [EquipmentController::class,'show']);
 
 Route::get('/equipment/popularity/{id}', [EquipmentController::class,'popularity']);
 Route::get('/equipment/average/{id}', [EquipmentController::class,'average']);
 
+Route::delete('/review/{id}', [ReviewController::class,'destroy']); 
 
-
+Route::get('/user/{id}', [UserController::class,'store']);
+Route::patch('/user/{id}', [UserController::class,'update']);
 /*
 Route::get('/films', [FilmController::class,'index']);
 Route::get('/films/{id}', [FilmController::class,'show']);
