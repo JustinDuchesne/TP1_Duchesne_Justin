@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryRequest extends FormRequest
+class AverageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|string|max:50",
-            "description" => "required|string",
-            "daily_price" => "required|float|max:99999999.99|min:0",
-            "category_id" => "required|integer|min:0"
+            "min_date" => "nullable|date",
+            "max_date" => "nullable|date",
         ];
     }
 }

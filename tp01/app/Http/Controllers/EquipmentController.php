@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EquipmentRequest;
+use App\Http\Requests\AverageRequest;
 use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
 use App\Models\Rental;
 use App\Models\Review;
 use Exception;
-use Illuminate\Container\Attributes\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class EquipmentController extends Controller
 {
@@ -44,13 +41,13 @@ class EquipmentController extends Controller
     public function popularity(string $id)
     {
         try{
-            $allReviews = Review::join( 'rentals', 'reviews.rental_id' ,'=', 'rentals.id') //'reviews', 'rentals.id', '=', 'reviews.rental_id'
+            $allReviews = Review::join( 'rentals', 'reviews.rental_id' ,'=', 'rentals.id')
                 ->where('rentals.equipment_id', $id)
                 ->selectRaw('COALESCE(COUNT(reviews.id),0) AS Nb_Reviews, SUM(reviews.rating) AS Avg_rating')
-                ->first(); //first? a revoir
+                ->first();
 
             //dd($allReviews);
-            return ['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4]; //'popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4
+            return response()->json(['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4])->setStatusCode(OK); //['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4]
         } catch (ModelNotFoundException $ex) {
             abort(NOT_FOUND, 'Invalid id');
         } catch (Exception $ex) {
@@ -58,39 +55,30 @@ class EquipmentController extends Controller
         }
     }
 
-    public function average(string $id, Request $request)
+    public function average(string $id, AverageRequest $request)
     {
         try{
-            $request->min_date; //doit lever érreur si min est plus grande que end
-            $request->max_date; //le format doit etre valide
+
+            $min_date = $request->input('min_date') ?? '1111-01-01'; 
+            $max_date = $request->input('max_date') ?? now()->toDateString();
+
                                 //paginer 20
 
             if($request->min_date > $request->max_date){
-                return ["La date minimum ne peut pas être suppérieur à la date maximum"];
+                return response()->json(["La date minimum ne peut pas être suppérieur à la date maximum"])->setStatusCode(INVALID_CONTENT);
             }
 
-            //$allEquipment = Rental::join('equipment', 'rentals.equipment_id', '=', 'equipment.id')
-            //    ->where('rentals.start_date', '>=', $request->min_date)
-            //    ->where('rentals.end_date', '<=', $request->max_date)
-            //    ->where('equipment.id', $id)
-            //    ->selectRaw('AVG(rentals.total_price) AS average_price')
-            //    ->first();
-
-
-            $allEquipment = Rental::join('equipment', 'rentals.equipment_id', '=', 'equipment.id')
-                ->whereDate('rentals.start_date', '>', $request->min_date)
-                ->whereDate('rentals.end_date', '<', $request->max_date)
-                ->where('rentals.equipment_id', '=',$id)
+            $avg =  Rental::where('equipment_id', $id)
+                ->where('start_date', '>=', $min_date)
+                ->where('end_date', '<=', $max_date)
                 ->avg('total_price');
-                //->selectRaw('AVG(rentals.total_price) AS average_price')
-                //->first();
 
-            //dd($allEquipment);
-            return $allEquipment;
+            return response()->json($avg)->setStatusCode(OK);
         } catch (ModelNotFoundException $ex) {
             abort(NOT_FOUND, 'Invalid id');
         } catch (Exception $ex) {
             abort(SERVER_ERROR, 'Server error');
         }
     }
+        
 }
