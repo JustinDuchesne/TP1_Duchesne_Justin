@@ -41,13 +41,21 @@ class EquipmentController extends Controller
     public function popularity(string $id)
     {
         try{
-            $allReviews = Review::join( 'rentals', 'reviews.rental_id' ,'=', 'rentals.id')
-                ->where('rentals.equipment_id', $id)
-                ->selectRaw('COALESCE(COUNT(reviews.id),0) AS Nb_Reviews, SUM(reviews.rating) AS Avg_rating')
+            $allReviews = Rental::join('reviews', 'rentals.id', '=', 'reviews.rental_id')
+                ->where('rentals.equipment_id', '=', $id)
+                ->selectRaw('COALESCE(COUNT(rentals.id),0) AS Nb_Reviews, SUM(reviews.rating) AS Avg_rating')
                 ->first();
 
+
+            //$allReviews = Review::join( 'rentals', 'reviews.rental_id' ,'=', 'rentals.id')
+            //    ->where('rentals.equipment_id', '=', $id)
+            //    ->selectRaw('COALESCE(COUNT(rentals.id),0) AS Nb_Reviews, SUM(reviews.rating) AS Avg_rating')
+            //    ->first();
+
+            $popularity = ($allReviews->Nb_Reviews * 0.6) + ($allReviews->Avg_rating * 0.4);
+
             //dd($allReviews);
-            return response()->json(['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4])->setStatusCode(OK); //['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4]
+            return response()->json(['popularity' => $popularity])->setStatusCode(OK); //['popularity' => $allReviews->count() * 0.6 + $allReviews->sum('rating') * 0.4]
         } catch (ModelNotFoundException $ex) {
             abort(NOT_FOUND, 'Invalid id');
         } catch (Exception $ex) {
@@ -61,8 +69,6 @@ class EquipmentController extends Controller
 
             $min_date = $request->input('min_date') ?? '1111-01-01'; 
             $max_date = $request->input('max_date') ?? now()->toDateString();
-
-                                //paginer 20
 
             if($request->min_date > $request->max_date){
                 return response()->json(["La date minimum ne peut pas être suppérieur à la date maximum"])->setStatusCode(INVALID_CONTENT);

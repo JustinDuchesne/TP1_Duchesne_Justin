@@ -7,7 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {

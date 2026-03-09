@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {

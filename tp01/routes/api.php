@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
@@ -13,12 +12,12 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/equipment', [EquipmentController::class,'index']);
-Route::post('/equipment/{id}', [EquipmentController::class,'show']);
+Route::get('/equipment/{id}', [EquipmentController::class,'show']);
 
 Route::get('/equipment/popularity/{id}', [EquipmentController::class,'popularity']);
 Route::get('/equipment/average/{id}', [EquipmentController::class,'average']);
 
 Route::delete('/review/{id}', [ReviewController::class,'destroy']); 
 
-Route::get('/user/{id}', [UserController::class,'store']);
+Route::post('/user', [UserController::class,'store']);
 Route::patch('/user/{id}', [UserController::class,'update']);
