@@ -57,7 +57,7 @@ class EquipmentTest extends TestCase
 
     public function test_equipment_popularity(): void
     {
-        //$this->seed(); //db aléatoire ICICICICICICICICICIC
+        //$this->seed(); 
 
         $this->seed([SportSeeder::class, CategorySeeder::class, EquipmentSeeder::class, EquipmentSportSeeder::class]);
         User::factory(4)->create();

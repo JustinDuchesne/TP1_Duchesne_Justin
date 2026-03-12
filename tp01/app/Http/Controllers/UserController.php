@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 
 class UserController extends Controller
@@ -33,12 +34,14 @@ class UserController extends Controller
     {
         try{
             //https://laracasts.com/discuss/channels/laravel/how-to-do-update-controller-routes-model-and-other-things-from-laravel-54-from-scratch-tutorial
-            $equipment = User::findOrFail($id);
-            $equipment->update($request->all());
-            return response()->noContent()->setStatusCode(OK);
+            $user = User::findOrFail($id);
+            $user->update($request->all());
+            return response()->json($user)->setStatusCode(OK);
         }catch (QueryException $ex) {
             abort(INVALID_CONTENT, 'Cannot be edited in database');
-        } catch (Exception $ex) {
+        } catch (ModelNotFoundException $ex) {
+            abort(NOT_FOUND, 'Invalid id');
+        }catch (Exception $ex) {
             abort(SERVER_ERROR, 'Server error');
         }
     }
