@@ -127,19 +127,22 @@ class EquipmentController extends Controller
                 description: 'Equipment ID',
                 in: 'path',
                 required: true,
+            ),
+            new OA\Parameter(
+                name: 'min_date',
+                description: 'Minimum date',
+                example: '2020-01-01',
+                in: 'path',
+                required: false,
+            ),
+            new OA\Parameter(
+                name: 'max_date',
+                description: 'Maximum Date',
+                in: 'path',
+                example: '2025-01-01',
+                required: false,
             )
         ],
-        requestBody: new OA\RequestBody(
-            required: false,
-            content: [
-                new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'min_date', type: 'string', example: '2020-01-01'),
-                        new OA\Property(property: 'max_date', type: 'string', example: '2025-01-01'),
-                    ]
-                )
-            ]
-        ),
         responses: [
             new OA\Response(
                 response: 200,

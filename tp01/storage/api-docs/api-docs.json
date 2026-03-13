@@ -85,28 +85,22 @@
                         "in": "path",
                         "description": "Equipment ID",
                         "required": true
+                    },
+                    {
+                        "name": "min_date",
+                        "in": "path",
+                        "description": "Minimum date",
+                        "required": false,
+                        "example": "2020-01-01"
+                    },
+                    {
+                        "name": "max_date",
+                        "in": "path",
+                        "description": "Maximum Date",
+                        "required": false,
+                        "example": "2025-01-01"
                     }
                 ],
-                "requestBody": {
-                    "required": false,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "min_date": {
-                                        "type": "string",
-                                        "example": "2020-01-01"
-                                    },
-                                    "max_date": {
-                                        "type": "string",
-                                        "example": "2025-01-01"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "OK"

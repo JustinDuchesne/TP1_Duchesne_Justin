@@ -63,6 +63,22 @@ class UserTest extends TestCase
         $this->assertDatabaseHas('users', $json);
     }
 
+    public function test_update_user_missing_data(): void
+    {
+        $this->seed();
+        $json = ['last_name'=>'asasa', 'email'=>'truc@gmail.com', 'phone' => '418-418-4188'];
+
+        $response = $this->patchJson('/api/user/1', $json);
+
+        $response->assertJsonFragment([
+            'last_name' => 'asasa',                 
+            'email' => 'truc@gmail.com',
+            'phone' => '418-418-4188',
+        ]);
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('users', $json);
+    }
+
     public function test_update_user_invalid_id(): void
     {
         $this->seed();
@@ -70,7 +86,7 @@ class UserTest extends TestCase
 
         $response = $this->patchJson('/api/user/100', $json);
 
-        $response->assertStatus(422);
+        $response->assertStatus(404);
     }
 
     public function test_update_user_invalid_data(): void

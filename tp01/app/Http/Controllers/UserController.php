@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
@@ -84,7 +85,7 @@ class UserController extends Controller
             new OA\Response(response: 404, description: 'User non trouvé')
         ]
     )]
-    public function update(UserRequest $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
         try {
             //https://laracasts.com/discuss/channels/laravel/how-to-do-update-controller-routes-model-and-other-things-from-laravel-54-from-scratch-tutorial
