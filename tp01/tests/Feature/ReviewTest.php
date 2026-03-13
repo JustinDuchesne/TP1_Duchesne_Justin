@@ -25,14 +25,12 @@ class ReviewTest extends TestCase
         $this->assertDatabaseMissing('reviews', ['id' => '1']);
     }
 
-    public function test_review_destroy_invalid_content(): void  //je suis pas sur que cela est possible....
+    public function test_review_destroy_invalid_content(): void
     {
         $this->seed();
 
         $response = $this->delete('/api/review/100');
 
-        $response->assertStatus(422);
-
-        //$this->assertDatabaseHas('review', ['id' => '1']);
+        $response->assertStatus(404);
     }
 }

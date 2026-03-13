@@ -10,12 +10,24 @@ use App\Models\Review;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Carbon\Carbon;
+use OpenApi\Attributes as OA;
 
 class EquipmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    #[OA\Get(
+        path: '/api/equipment',
+        summary: 'routourne une liste de equipment',
+        tags: ['Equipments'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'OK'
+            )
+        ]
+    )]
     public function index()
     {
         try {
@@ -28,6 +40,29 @@ class EquipmentController extends Controller
     /**
      * Display the specified resource.
      */
+    #[OA\Get(
+        path: '/api/equipment/{id}',
+        summary: 'Afficher un equipment',
+        tags: ['Equipments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'Equipment ID',
+                in: 'path',
+                required: true,
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'OK'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Equipment non trouvé'
+            )
+        ]
+    )]
     public function show(string $id)
     {
         try {
@@ -39,9 +74,32 @@ class EquipmentController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: '/api/equipment/popularity/{id}',
+        summary: 'Afficher la popularité d\'un equipment',
+        tags: ['Equipments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'Equipment ID',
+                in: 'path',
+                required: true,
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'OK'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Equipment non trouvé'
+            )
+        ]
+    )]
     public function popularity(string $id)
     {
-        try{
+        try {
             Equipment::findOrFail($id);
 
             $allReviews = Rental::join('reviews', 'rentals.id', '=', 'reviews.rental_id')
@@ -51,7 +109,7 @@ class EquipmentController extends Controller
 
             $popularity = round(($allReviews->Nb_Reviews * 0.6) + ($allReviews->Avg_rating * 0.4), 2);
 
-            return response()->json(['popularity' => $popularity])->setStatusCode(OK); 
+            return response()->json(['popularity' => $popularity])->setStatusCode(OK);
         } catch (ModelNotFoundException $ex) {
             abort(NOT_FOUND, 'Invalid id');
         } catch (Exception $ex) {
@@ -59,14 +117,48 @@ class EquipmentController extends Controller
         }
     }
 
+    #[OA\Get(
+        path: '/api/equipment/average/{id}',
+        summary: 'Afficher la moyenne du prix d\'un equipment',
+        tags: ['Equipments'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'Equipment ID',
+                in: 'path',
+                required: true,
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: false,
+            content: [
+                new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'min_date', type: 'string', example: '2020-01-01'),
+                        new OA\Property(property: 'max_date', type: 'string', example: '2025-01-01'),
+                    ]
+                )
+            ]
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'OK'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Equipment non trouvé'
+            )
+        ]
+    )]
     public function average(string $id, AverageRequest $request)
     {
-        try{
-            $min_date = $request->input('min_date') ?? '1111-01-01'; 
+        try {
+            $min_date = $request->input('min_date') ?? '1111-01-01';
             $max_date = $request->input('max_date') ?? now()->toDateString();
 
             //https://laracasts.com/discuss/channels/laravel/working-with-laravel-dates-for-dummies
-            if(Carbon::parse($min_date)->isAfter(Carbon::parse($max_date))){
+            if (Carbon::parse($min_date)->isAfter(Carbon::parse($max_date))) {
                 return response()->json(['error' => "La date minimum ne peut pas être suppérieur à la date maximum"])->setStatusCode(INVALID_CONTENT);
             }
 
@@ -84,5 +176,4 @@ class EquipmentController extends Controller
             abort(SERVER_ERROR, 'Server error');
         }
     }
-        
 }

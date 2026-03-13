@@ -1,0 +1,264 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Laravel pour Albums et Chansons",
+        "description": "Documentation API Laravel avec Swagger",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/equipment": {
+            "get": {
+                "tags": [
+                    "Equipments"
+                ],
+                "summary": "routourne une liste de equipment",
+                "description": "Display a listing of the resource.",
+                "operationId": "771e58f407e40ca413f92c85f944e760",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/equipment/{id}": {
+            "get": {
+                "tags": [
+                    "Equipments"
+                ],
+                "summary": "Afficher un equipment",
+                "description": "Display the specified resource.",
+                "operationId": "546d2e88aec2a0d7af708399e7e20a1e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Equipment ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Equipment non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/equipment/popularity/{id}": {
+            "get": {
+                "tags": [
+                    "Equipments"
+                ],
+                "summary": "Afficher la popularité d'un equipment",
+                "operationId": "a9bffa96b1f029d08ba86fb273dacf57",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Equipment ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Equipment non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/equipment/average/{id}": {
+            "get": {
+                "tags": [
+                    "Equipments"
+                ],
+                "summary": "Afficher la moyenne du prix d'un equipment",
+                "operationId": "f14d0c885c8df3ff3ff6c5658a2e8859",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Equipment ID",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "min_date": {
+                                        "type": "string",
+                                        "example": "2020-01-01"
+                                    },
+                                    "max_date": {
+                                        "type": "string",
+                                        "example": "2025-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Equipment non trouvé"
+                    }
+                }
+            }
+        },
+        "/api/review/{id}": {
+            "delete": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Supprimer une review",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "a783a688ec0701dd9a462c8902db7c7f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Review ID",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review retirée"
+                    },
+                    "404": {
+                        "description": "Données invalides"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Ajouter un user",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "089999749fbdec98922de2f74ba8d540",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Justin"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Duchène"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "Jhon@mcjhon.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "418-418-4188"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User ajoutée"
+                    },
+                    "422": {
+                        "description": "Données invalides"
+                    }
+                }
+            }
+        },
+        "/api/user/{id}": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Modifier un user",
+                "description": "Update the specified resource in storage.",
+                "operationId": "eb2cf2407bd42a8024096b55ce14538e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "Justin"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Duchène"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "Jhon@mcjhon.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "418-418-4188"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User modifiée"
+                    },
+                    "422": {
+                        "description": "Données invalides"
+                    },
+                    "404": {
+                        "description": "User non trouvé"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Equipments",
+            "description": "Equipments"
+        },
+        {
+            "name": "Reviews",
+            "description": "Reviews"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}

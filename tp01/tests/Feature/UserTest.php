@@ -35,6 +35,17 @@ class UserTest extends TestCase
         $this->assertDatabaseMissing('users', $json);
     }
 
+    public function test_store_user_missing_data(): void
+    {
+        $this->seed();
+        $json = ['last_name'=>'sdsdsd', 'email'=>'truc@gmail.com', 'phone' => '418-418-4188'];
+
+        $response = $this->postJson('/api/user', $json);
+
+        $response->assertStatus(422);
+        $this->assertDatabaseMissing('users', $json);
+    }
+
     public function test_update_user(): void
     {
         $this->seed();
